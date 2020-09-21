@@ -10,7 +10,7 @@ class FrontendAppView(View):
     Serves the compiled frontend entry point (only works if you have run `npm
     build`).
     """
-    index_file_path = os.path.join(settings.FRONTENT_APP_DIR, 'build', 'index.html')
+    index_file_path = os.path.join(settings.FRONTENT_APP_DIR, 'index.html')
 
     def get(self, request):
         try:

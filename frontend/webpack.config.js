@@ -20,9 +20,13 @@ module.exports = {
         '/posts': {
             changeOrigin: true,
             target: 'http://127.0.0.1:8000'
+        },
+        '/media': {
+            changeOrigin: true,
+            target: 'http://127.0.0.1:8000'
         }
     },
-    publicPath: '/build/',
+    publicPath: '/static/',
   },
   module: {
     rules: [

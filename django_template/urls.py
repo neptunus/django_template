@@ -22,11 +22,11 @@ urlpatterns = [
     path('posts/', include('api.urls')),
     path('admin/', admin.site.urls),
     # keep FrontendAppView on the bottom for BrowserHistory urls to work
-    re_path(r'^', FrontendAppView.as_view()),
-
 ]
 
 # Makes media accessible in development
 from django.conf import settings
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns.append(re_path(r'^', FrontendAppView.as_view()))
