@@ -19,8 +19,11 @@ in the terminal, run `$ mkvirtualenv <name-of-virtualenv>` before installing wit
 
 make sure to add the static directory to your web server settings, something like:
 
-URL | Directory
-`/static/` | `/home/<username>/django_template/django_template/staticfiles`
+URL         | Directory
+---         | ---------
+`/static/`  | `/home/<username>/django_template/django_template/staticfiles`
+`/media/`   | `/home/<username>/django_template/django_template/media`
+
 
 then in the terminal, run `$ python manage.py collectstatic`  
 this is necessary to gather any static files provided by packages, such as Django's admin styles & scripts.
