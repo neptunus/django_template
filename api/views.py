@@ -1,51 +1,43 @@
 from api.models import Post
 from api.serializers import PostSerializer
-from django.http import request, Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import mixins
+from rest_framework import generics
 
 
-class PostList(APIView):
+class PostList(
+        mixins.ListModelMixin,
+        mixins.CreateModelMixin,
+        generics.GenericAPIView):
     """
     List all posts, or create a new one
     """
-    def get(self, request, format=None):
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
-    def post(self, request, format=None):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-class PostDetail(APIView):
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class PostDetail(
+        mixins.RetrieveModelMixin,
+        mixins.UpdateModelMixin,
+        mixins.DestroyModelMixin,
+        generics.GenericAPIView):
     """
     Retrieve, update or delete a post.
     """
-    def get_object(self, pk):
-        try:
-            return Post.objects.get(pk=pk)
-        except Post.DoesNotExist:
-            raise Http404
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
-    def get(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = PostSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
