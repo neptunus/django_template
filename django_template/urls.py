@@ -14,12 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
+from django_template.views import FrontendAppView
 
 urlpatterns = [
     path('posts/', include('api.urls')),
     path('admin/', admin.site.urls),
+    # keep FrontendAppView on the bottom for BrowserHistory urls to work
+    re_path(r'^', FrontendAppView.as_view()),
+
 ]
 
 # Makes media accessible in development
