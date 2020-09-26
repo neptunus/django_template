@@ -21,7 +21,6 @@ from django_template.views import FrontendAppView
 urlpatterns = [
     path('posts/', include('api.urls')),
     path('admin/', admin.site.urls),
-    # keep FrontendAppView on the bottom for BrowserHistory urls to work
 ]
 
 # Makes media accessible in development
@@ -29,4 +28,11 @@ from django.conf import settings
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns.append(re_path(r'^', FrontendAppView.as_view()))
+# Keep FrontendAppView on the bottom for BrowserHistory urls to work.
+
+# Add any backend paths to the regex, separated by pipes, in order to let Django
+# add a trailing slash to them.
+# For example, to add a new path 'login' to the site, add it to urlpatterns
+# and change `(admin|posts)` to `(admin|posts|login)`
+
+urlpatterns.append(re_path(r'^(?!(admin|posts))', FrontendAppView.as_view()))
